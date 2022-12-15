@@ -4,8 +4,8 @@ import com.testycool.testycoolserver.features.question.dtos.CreateQuestionReques
 import com.testycool.testycoolserver.features.question.entities.Question;
 import com.testycool.testycoolserver.shared.interfaces.ServiceDeleteExecutor;
 import com.testycool.testycoolserver.shared.interfaces.ServiceGetExecutor;
+import com.testycool.testycoolserver.shared.interfaces.ServiceUpdateExecutor;
 
-public interface IQuestionService extends ServiceGetExecutor<Question, Long>, ServiceDeleteExecutor<Question, Long> {
+public interface IQuestionService extends ServiceGetExecutor<Question, Long>, ServiceUpdateExecutor<Question, Long>, ServiceDeleteExecutor<Question, Long> {
     Question create(CreateQuestionRequest request);
-    Question update(Long id, Question question);
 }
