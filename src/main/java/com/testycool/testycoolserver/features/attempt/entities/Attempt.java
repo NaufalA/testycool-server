@@ -22,6 +22,10 @@ public class Attempt extends SerialBaseEntity {
     @Column(name = "unanswered", nullable = false)
     private Integer unanswered;
 
+    @Enumerated(EnumType.STRING)
+    @Column(name = "status", nullable = false)
+    private Status status;
+
     @Temporal(TemporalType.DATE)
     @Column(name = "created_at", nullable = false)
     private Date createdAt;
@@ -59,6 +63,14 @@ public class Attempt extends SerialBaseEntity {
 
     public void setUnanswered(Integer unanswered) {
         this.unanswered = unanswered;
+    }
+
+    public Status getStatus() {
+        return status;
+    }
+
+    public void setStatus(Status status) {
+        this.status = status;
     }
 
     public Date getCreatedAt() {
