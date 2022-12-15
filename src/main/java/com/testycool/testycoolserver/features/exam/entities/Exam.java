@@ -1,17 +1,20 @@
 package com.testycool.testycoolserver.features.exam.entities;
 
+import com.testycool.testycoolserver.features.question.entities.Question;
 import com.testycool.testycoolserver.shared.entities.SerialBaseEntity;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Table(name = "exams")
 public class Exam extends SerialBaseEntity{
-    @Column(name = "title", nullable = false, length = 100)
+    @Column(name = "title", nullable = false, length = 100, unique = true)
     private String title;
 
-    @Column(name = "password", nullable = false)
+    @Column(name = "password", nullable = false, unique = true)
     private String password;
 
     @Column(name = "time_limit", nullable = false)
@@ -19,11 +22,14 @@ public class Exam extends SerialBaseEntity{
 
     @Temporal(TemporalType.DATE)
     @Column(name = "start_at", nullable = false)
-    private Date startAt;
+    private Date startAt = new Date(System.currentTimeMillis());
 
     @Enumerated(EnumType.STRING)
     @Column(name = "status", nullable = false)
-    private Status status;
+    private Status status = Status.WAITING;
+
+    @OneToMany(mappedBy = "exam", orphanRemoval = true)
+    private List<Question> questions = new ArrayList<>();
 
     public String getTitle() {
         return title;
@@ -63,6 +69,14 @@ public class Exam extends SerialBaseEntity{
 
     public void setStatus(Status status) {
         this.status = status;
+    }
+
+    public List<Question> getQuestions() {
+        return questions;
+    }
+
+    public void setQuestions(List<Question> questions) {
+        this.questions = questions;
     }
 
     public enum Status {

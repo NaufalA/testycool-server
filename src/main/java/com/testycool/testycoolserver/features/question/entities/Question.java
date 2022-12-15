@@ -2,6 +2,7 @@ package com.testycool.testycoolserver.features.question.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.testycool.testycoolserver.features.answer.entities.Answer;
+import com.testycool.testycoolserver.features.choice.entities.Choice;
 import com.testycool.testycoolserver.features.exam.entities.Exam;
 import com.testycool.testycoolserver.shared.constants.TextFormat;
 import com.testycool.testycoolserver.shared.entities.SerialBaseEntity;
@@ -30,16 +31,8 @@ public class Question extends SerialBaseEntity {
     @JoinColumn(name = "exam_id")
     private Exam exam;
 
-    @OneToMany(mappedBy = "question", orphanRemoval = true)
-    private List<Answer> answers = new ArrayList<>();
-
-    public List<Answer> getAnswers() {
-        return answers;
-    }
-
-    public void setAnswers(List<Answer> answers) {
-        this.answers = answers;
-    }
+    @OneToMany(mappedBy = "question", orphanRemoval = true, cascade = CascadeType.PERSIST)
+    private List<Choice> choices = new ArrayList<>();
 
     public String getContent() {
         return content;
@@ -71,6 +64,14 @@ public class Question extends SerialBaseEntity {
 
     public void setExam(Exam exam) {
         this.exam = exam;
+    }
+
+    public List<Choice> getChoices() {
+        return choices;
+    }
+
+    public void setChoices(List<Choice> choices) {
+        this.choices = choices;
     }
 
     public enum Type {

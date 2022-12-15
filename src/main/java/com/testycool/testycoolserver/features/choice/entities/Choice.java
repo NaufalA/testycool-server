@@ -21,8 +21,8 @@ public class Choice extends SerialBaseEntity {
     private TextFormat textFormat;
 
     @JsonIgnore
-    @ManyToOne
-    @JoinColumn(name = "question_id")
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "question_id", nullable = false)
     private Question question;
 
     public Boolean getCorrect() {
