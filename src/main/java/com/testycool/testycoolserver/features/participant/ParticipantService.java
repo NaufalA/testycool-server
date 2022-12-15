@@ -167,6 +167,18 @@ public class ParticipantService implements IParticipantService {
         return registration.get().getId();
     }
 
+
+    @Override
+    public ParticipantRegistration getById(Long id) {
+        Optional<ParticipantRegistration> registration = registrationRepository.findById(id);
+
+        if (registration.isEmpty()) {
+            throw new NotFoundException("Participant Data Not Found");
+        }
+
+        return registration.get();
+    }
+
     private ParticipantDto mapToDto(Long examId, ParticipantRegistration registration) {
         ParticipantDto response = new ParticipantDto();
         response.setExamId(examId);
