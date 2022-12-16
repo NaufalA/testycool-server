@@ -1,5 +1,6 @@
-package com.testycool.testycoolserver.features.answer.dtos;
+package com.testycool.testycoolserver.features.answer;
 
+import com.testycool.testycoolserver.features.answer.dtos.CreateAnswerRequest;
 import com.testycool.testycoolserver.features.answer.entities.Answer;
 import com.testycool.testycoolserver.features.answer.interfaces.IAnswerRepository;
 import com.testycool.testycoolserver.features.answer.interfaces.IAnswerService;
@@ -12,10 +13,12 @@ import com.testycool.testycoolserver.shared.exceptions.NotFoundException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.stereotype.Service;
 
 import java.util.Collection;
 import java.util.Optional;
 
+@Service
 public class AnswerService implements IAnswerService {
     private final IAnswerRepository answerRepository;
     private final IAttemptService attemptService;

@@ -16,17 +16,23 @@ import com.testycool.testycoolserver.shared.exceptions.NotFoundException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.stereotype.Service;
 
 import java.util.Collection;
 import java.util.Date;
 import java.util.Optional;
 
+@Service
 public class AttemptService implements IAttemptService {
     private final IAttemptRepository attemptRepository;
     private final IExamService examService;
     private final IParticipantService participantService;
 
-    public AttemptService(IAttemptRepository attemptRepository, IExamService examService, IParticipantService participantService) {
+    public AttemptService(
+            IAttemptRepository attemptRepository,
+            IExamService examService,
+            IParticipantService participantService
+    ) {
         this.attemptRepository = attemptRepository;
         this.examService = examService;
         this.participantService = participantService;
@@ -34,7 +40,6 @@ public class AttemptService implements IAttemptService {
 
     @Override
     public Attempt create(CreateAttemptRequest request) {
-        Exam exam = examService.getById(request.getExamId());
         ParticipantRegistration registration = participantService.getById(request.getParticipantId());
 
         Attempt attempt = new Attempt();
