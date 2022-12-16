@@ -1,8 +1,8 @@
-package com.testycool.testycoolserver.features.question;
+package com.testycool.testycoolserver.features.attempt;
 
-import com.testycool.testycoolserver.features.question.dtos.CreateQuestionRequest;
-import com.testycool.testycoolserver.features.question.entities.Question;
-import com.testycool.testycoolserver.features.question.interfaces.IQuestionService;
+import com.testycool.testycoolserver.features.attempt.dtos.CreateAttemptRequest;
+import com.testycool.testycoolserver.features.attempt.entities.Attempt;
+import com.testycool.testycoolserver.features.attempt.interfaces.IAttemptService;
 import com.testycool.testycoolserver.shared.classes.GenericSpecification;
 import com.testycool.testycoolserver.shared.classes.SearchCriteria;
 import com.testycool.testycoolserver.shared.constants.QueryOperator;
@@ -20,22 +20,22 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping(UrlMapping.QUESTION_URL)
-public class QuestionController {
-    private final IQuestionService questionService;
+@RequestMapping(UrlMapping.ATTEMPT_URL)
+public class AttemptController {
+    private final IAttemptService attemptService;
 
-    public QuestionController(IQuestionService questionService) {
-        this.questionService = questionService;
+    public AttemptController(IAttemptService attemptService) {
+        this.attemptService = attemptService;
     }
 
     @PostMapping
-    public ResponseEntity<CommonResponse> create(@RequestBody CreateQuestionRequest request) {
-        Question question = questionService.create(request);
+    public ResponseEntity<CommonResponse> create(@RequestBody CreateAttemptRequest request) {
+        Attempt attempt = attemptService.create(request);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(new SuccessResponse<>(
                 HttpStatus.CREATED.value(),
-                "New Question Created",
-                question
+                "New Attempt Created",
+                attempt
         ));
     }
 
@@ -45,9 +45,9 @@ public class QuestionController {
             @RequestParam(name = "page", defaultValue = "0") Integer page,
             @RequestParam(name = "size", defaultValue = "0") Integer size
     ) {
-        Specification<Question> specification = new GenericSpecification<>(
+        Specification<Attempt> specification = new GenericSpecification<>(
                 new SearchCriteria("examId", examId, QueryOperator.EQUALS, SearchOperation.AND),
-                (root, criteria) -> root.join("exam").get("id")
+                (root, criteria) -> root.join("participantRegistration").join("exam").get("id")
         );
 
         Pageable pageable;
@@ -57,47 +57,44 @@ public class QuestionController {
             pageable = PageRequest.of(page, size);
         }
 
-        Page<Question> questions = questionService.getAll(specification, pageable);
+        Page<Attempt> attempts = attemptService.getAll(specification, pageable);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(new SuccessResponse<>(
                 HttpStatus.CREATED.value(),
-                "Get All Question",
-                new PagedResponse<>(questions)
+                "Get All Attempt",
+                new PagedResponse<>(attempts)
         ));
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<CommonResponse> getById(@PathVariable(name = "id") Long id) {
-        Question question = questionService.getById(id);
+        Attempt attempt = attemptService.getById(id);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(new SuccessResponse<>(
                 HttpStatus.CREATED.value(),
-                "Get Question With ID " + id,
-                question
+                "Get Attempt With ID " + id,
+                attempt
         ));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<CommonResponse> update(
-            @PathVariable(name = "id") Long id,
-            @RequestBody Question updatedQuestion
-    ) {
-        Question question = questionService.update(id, updatedQuestion);
+    public ResponseEntity<CommonResponse> getById(@PathVariable(name = "id") Long id, @RequestBody Attempt updatedAttempt) {
+        Attempt attempt = attemptService.update(id, updatedAttempt);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(new SuccessResponse<>(
                 HttpStatus.CREATED.value(),
-                "Update Question With ID " + id,
-                question
+                "Update Attempt With ID " + id,
+                attempt
         ));
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<CommonResponse> delete(@PathVariable(name = "id") Long id) {
-        Long deletedId = questionService.deleteById(id);
+        Long deletedId = attemptService.deleteById(id);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(new SuccessResponse<>(
                 HttpStatus.CREATED.value(),
-                "Delete Question With ID " + id,
+                "Delete Attempt With ID " + id,
                 deletedId
         ));
     }

@@ -9,6 +9,11 @@ import com.testycool.testycoolserver.features.attempt.interfaces.IAttemptService
 import com.testycool.testycoolserver.features.choice.interfaces.IChoiceService;
 import com.testycool.testycoolserver.features.question.entities.Question;
 import com.testycool.testycoolserver.features.question.interfaces.IQuestionService;
+import com.testycool.testycoolserver.shared.classes.GenericSpecification;
+import com.testycool.testycoolserver.shared.classes.SearchCriteria;
+import com.testycool.testycoolserver.shared.constants.QueryOperator;
+import com.testycool.testycoolserver.shared.constants.SearchOperation;
+import com.testycool.testycoolserver.shared.exceptions.DataExistException;
 import com.testycool.testycoolserver.shared.exceptions.NotFoundException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -25,7 +30,12 @@ public class AnswerService implements IAnswerService {
     private final IQuestionService questionService;
     private final IChoiceService choiceService;
 
-    public AnswerService(IAnswerRepository answerRepository, IAttemptService attemptService, IQuestionService questionService, IChoiceService choiceService) {
+    public AnswerService(
+            IAnswerRepository answerRepository,
+            IAttemptService attemptService,
+            IQuestionService questionService,
+            IChoiceService choiceService
+    ) {
         this.answerRepository = answerRepository;
         this.attemptService = attemptService;
         this.questionService = questionService;
@@ -34,6 +44,14 @@ public class AnswerService implements IAnswerService {
 
     @Override
     public Answer create(CreateAnswerRequest request) {
+        Optional<Answer> existingAnswer = getByQuestionId(request.getQuestionId()).stream().filter(
+                a -> a.getAttempt().getParticipantRegistration().getId().equals(request.getParticipantId())
+        ).findFirst();
+
+        if (existingAnswer.isPresent()) {
+            throw new DataExistException("Answer Already Exist");
+        }
+
         Attempt attempt = attemptService.getByParticipantId(request.getParticipantId());
         Question question = questionService.getById(request.getQuestionId());
 
@@ -68,6 +86,18 @@ public class AnswerService implements IAnswerService {
         }
 
         return answer.get();
+    }
+
+    @Override
+    public Page<Answer> getByQuestionId(Long questionId) {
+        Specification<Answer> specification = new GenericSpecification<>(
+                new SearchCriteria("questionId", questionId, QueryOperator.EQUALS, SearchOperation.AND),
+                (root, criteria) -> root.join("choice").join("question").get("id")
+        );
+
+        Pageable pageable = Pageable.unpaged();
+
+        return getAll(specification, pageable);
     }
 
     @Override

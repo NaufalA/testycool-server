@@ -70,7 +70,10 @@ public class ChoiceController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<CommonResponse> getById(@PathVariable(name = "id") Long id, @RequestBody Choice updatedChoice) {
+    public ResponseEntity<CommonResponse> update(
+            @PathVariable(name = "id") Long id,
+            @RequestBody Choice updatedChoice
+    ) {
         Choice choice = choiceService.update(id, updatedChoice);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(new SuccessResponse<>(

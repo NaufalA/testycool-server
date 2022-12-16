@@ -45,6 +45,7 @@ public class AttemptService implements IAttemptService {
         Attempt attempt = new Attempt();
         attempt.setParticipantRegistration(registration);
         attempt.setCreatedAt(request.getCreatedAt());
+        attempt.setUpdatedAt(attempt.getCreatedAt());
         attempt.setCorrects(0);
         attempt.setWrongs(0);
         attempt.setUnanswered(0);

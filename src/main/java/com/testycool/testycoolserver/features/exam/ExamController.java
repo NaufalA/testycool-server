@@ -19,7 +19,7 @@ import java.util.Collection;
 @RestController
 @RequestMapping(UrlMapping.EXAM_URL)
 public class ExamController {
-    private final IExamService examService;
+private final IExamService examService;
 
     public ExamController(IExamService examService) {
         this.examService = examService;
@@ -73,7 +73,10 @@ public class ExamController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<CommonResponse> getById(@PathVariable(name = "id") Long id, @RequestBody Exam updatedExam) {
+    public ResponseEntity<CommonResponse> update(
+            @PathVariable(name = "id") Long id,
+            @RequestBody Exam updatedExam
+    ) {
         Exam exam = examService.update(id, updatedExam);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(new SuccessResponse<>(

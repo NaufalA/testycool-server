@@ -1,5 +1,6 @@
 package com.testycool.testycoolserver.features.answer.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.testycool.testycoolserver.features.attempt.entities.Attempt;
 import com.testycool.testycoolserver.features.choice.entities.Choice;
 import com.testycool.testycoolserver.features.question.entities.Question;
@@ -17,10 +18,12 @@ public class Answer extends SerialBaseEntity {
     @Embedded
     private EssayAnswer essayAnswer;
 
+    @JsonIgnore
     @ManyToOne(optional = false)
     @JoinColumn(name = "question_id", nullable = false)
     private Question question;
 
+    @JsonIgnore
     @ManyToOne(optional = false)
     @JoinColumn(name = "attempt_id", nullable = false)
     private Attempt attempt;
