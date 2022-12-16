@@ -1,5 +1,6 @@
 package com.testycool.testycoolserver.features.analytics.entities;
 
+import com.testycool.testycoolserver.features.exam.entities.Exam;
 import com.testycool.testycoolserver.features.participant.entities.ParticipantRegistration;
 import com.testycool.testycoolserver.shared.entities.SerialBaseEntity;
 
@@ -15,6 +16,10 @@ public class Analytics extends SerialBaseEntity {
     @Temporal(TemporalType.DATE)
     @Column(name = "created_at", nullable = false)
     private Date createdAt;
+
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "exam_id", nullable = false)
+    private Exam exam;
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "participant_registration_id", nullable = false)
@@ -34,6 +39,14 @@ public class Analytics extends SerialBaseEntity {
 
     public void setCreatedAt(Date createdAt) {
         this.createdAt = createdAt;
+    }
+
+    public Exam getExam() {
+        return exam;
+    }
+
+    public void setExam(Exam exam) {
+        this.exam = exam;
     }
 
     public ParticipantRegistration getParticipantRegistration() {
