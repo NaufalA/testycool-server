@@ -1,19 +1,14 @@
 package com.testycool.testycoolserver.features.answer;
 
+import com.testycool.testycoolserver.features.answer.dtos.AnswerSummary;
 import com.testycool.testycoolserver.features.answer.dtos.CreateAnswerRequest;
 import com.testycool.testycoolserver.features.answer.entities.Answer;
 import com.testycool.testycoolserver.features.answer.interfaces.IAnswerService;
-import com.testycool.testycoolserver.shared.classes.GenericSpecification;
-import com.testycool.testycoolserver.shared.classes.SearchCriteria;
-import com.testycool.testycoolserver.shared.constants.QueryOperator;
-import com.testycool.testycoolserver.shared.constants.SearchOperation;
 import com.testycool.testycoolserver.shared.constants.UrlMapping;
 import com.testycool.testycoolserver.shared.dtos.CommonResponse;
 import com.testycool.testycoolserver.shared.dtos.PagedResponse;
 import com.testycool.testycoolserver.shared.dtos.SuccessResponse;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -71,6 +66,19 @@ public class AnswerController {
                 HttpStatus.CREATED.value(),
                 "Update Answer With ID " + id,
                 answer
+        ));
+    }
+
+    @GetMapping("/summary/{questionId}")
+    public ResponseEntity<CommonResponse> getAnswerSummary(
+            @PathVariable(name = "questionId") Long questionId
+    ) throws Exception {
+        AnswerSummary summary = answerService.getAnswerSummary(questionId);
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(new SuccessResponse<>(
+                HttpStatus.CREATED.value(),
+                "Get Answer Summary for Question With ID " + questionId,
+                summary
         ));
     }
 }

@@ -1,6 +1,8 @@
 package com.testycool.testycoolserver.features.answer;
 
+import com.testycool.testycoolserver.features.answer.dtos.AnswerSummary;
 import com.testycool.testycoolserver.features.answer.dtos.CreateAnswerRequest;
+import com.testycool.testycoolserver.features.answer.dtos.projection.AnswerSummaryQuery;
 import com.testycool.testycoolserver.features.answer.entities.Answer;
 import com.testycool.testycoolserver.features.answer.interfaces.IAnswerRepository;
 import com.testycool.testycoolserver.features.answer.interfaces.IAnswerService;
@@ -98,6 +100,17 @@ public class AnswerService implements IAnswerService {
         Pageable pageable = Pageable.unpaged();
 
         return getAll(specification, pageable);
+    }
+
+    @Override
+    public AnswerSummary getAnswerSummary(Long questionId) throws Exception {
+        AnswerSummaryQuery answerSummaryQuery = answerRepository.getAnswerSummary(questionId);
+        AnswerSummary answerSummary = new AnswerSummary();
+        answerSummary.setCorrects(answerSummaryQuery.getCorrects());
+        answerSummary.setWrongs(answerSummaryQuery.getWrongs());
+        answerSummary.setTotal(answerSummary.getCorrects() + answerSummaryQuery.getWrongs());
+
+        return answerSummary;
     }
 
     @Override
