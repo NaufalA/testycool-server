@@ -1,8 +1,8 @@
 spring:
   datasource:
-    url: jdbc:postgresql://${POSTGRES_HOST:localhost}:${POSTGRES_PORT:5432}/${POSTGRES_DB}
-    username: ${POSTGRES_USER}
-    password: ${POSTGRES_USER_PASSWORD}
+    url: jdbc:postgresql://${POSTGRES_HOST:localhost}:${POSTGRES_PORT:5432}/${POSTGRES_DB:testycool}
+    username: ${POSTGRES_USER:postgres}
+    password: ${POSTGRES_USER_PASSWORD:postgres}
     driver-class-name: org.postgresql.Driver
   jpa:
     hibernate:
@@ -10,7 +10,7 @@ spring:
     show-sql: true
 
 server:
-  port: ${SERVER_PORT}
+  port: ${SERVER_PORT:50051}
 
 jwt:
-  expiration: ${JWT_EXPIRATION}
+  expiration: ${JWT_EXPIRATION:300000}
